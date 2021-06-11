@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%-include('../partials/header') -%>
+
+  <body>
+    <%-include('../components/navbar') -%>
+
+    <center>
+      <h1>Register Here</h1>
+    </center>
+    <br />
+    <div class="container form-group">
+      <form action="/email" method="post">
+        <div>
+          <label for="email">Enter Your Email</label>
+          <input type="text" name="email" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn danger">Submit</button>
+      </form>
+
+      <form action="/register" method="post">
+        <div>
+          <label for="posttitle">PostTitle</label>
+          <input type="text" name="posttitle" class="form-control" />
+        </div>
+
+        <div>
+          <label for="postimage">Image</label>
+          <input type="text" name="postimage" class="form-control" />
+        </div>
+
+        <div>
+          <label for="postcontent">Post Content</label>
+          <textarea
+            type="text"
+            rows="7"
+            name="postcontent"
+            class="form-control"
+          ></textarea>
+        </div>
+        <button type="submit" class="btn btn primary">Submit</button>
+        <div></div>
+      </form>
+    </div>
+  </body>
+</html>
+
+<%- include('../partials/foot')-%>
