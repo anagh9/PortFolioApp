@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const path = require("path");
+var session = require("express-session");
 require("dotenv").config();
 require("./models/conn");
 
@@ -8,11 +9,13 @@ const Port = process.env.PORT || 5000;
 const blog = require("./models/blogSchema");
 
 const data = require("./models/schema");
-const staticPath = path.join(__dirname, "./public");
+const staticPath = path.join(__dirname, "/public");
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(staticPath));
 app.set("view engine", "ejs");
+app.use(express.static(staticPath));
+app.use(session({ secret: "Shh, its a secret!" }));
 
 app.get("/", (req, res) => {
   res.render("./pages/index");
@@ -54,28 +57,28 @@ app.post("/contact", async (req, res) => {
     res.status(400).send(e);
   }
 });
+app.use(express.static(staticPath));
 
-app.get("/blogPage/:posttitle", async (req, res) => {
+app.get("/blog/:posttitle", async (req, res) => {
   try {
     await blog.findOne({ email: "anagh9931@gmail.com" }, (err, foundPost) => {
       if (!foundPost) {
         res.send("User not registered");
-        console.log("User not registered");
+        console.log("User not Registered");
       } else {
         requestedtitle = req.params.posttitle.replace("-", " ");
-        let b = 0;
-        var postnumber = 0;
+        let postContent, postImage;
         foundPost.posts.forEach((post) => {
-          postnumber = postnumber + 1;
-          if (requestedtitle.toLowerCase() == post.posttitle.toLowerCase()) {
-            b = 1;
-            res.render("./pages/blogsPages", {
-              // posttitle: requestedtitle,
-              // postimage: post.postimage,
-              // postdate: post.postdate,
-              // postcontent: post.postcontent,
-            });
+          if (post.posttitle === requestedtitle) {
+            postContent = post.postcontent;
+            postImage = post.postimage;
           }
+        });
+        res.render("pages/blogsPages", {
+          title: "Anagh Portfolio",
+          requestedtitle,
+          postImage,
+          postContent,
         });
       }
     });
